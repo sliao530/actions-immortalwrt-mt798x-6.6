@@ -8,46 +8,8 @@
 # ./scripts/feeds update -a
 # ./scripts/feeds install -a
 
-# theme
-rm -rf feeds/luci/themes/luci-theme-argon
-git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
-git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
-
-# passwall
-rm -rf feeds/packages/lang/golang
-git clone https://github.com/sbwml/packages_lang_golang -b 26.x feeds/packages/lang/golang
-
-rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls}
-git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/passwall-packages
-
-rm -rf feeds/luci/applications/luci-app-passwall
-# git clone https://github.com/Openwrt-Passwall/openwrt-passwall package/passwall-luci
-git clone https://github.com/Openwrt-Passwall/openwrt-passwall2 package/passwall2-luci
-
-# tailscale
-# sed -i '/\/etc\/init\.d\/tailscale/d;/\/etc\/config\/tailscale/d;' feeds/packages/net/tailscale/Makefile
-# git clone https://github.com/asvow/luci-app-tailscale package/luci-app-tailscale
-
-# Modify default IP
-sed -i 's/192.168.6.1/10.0.0.1/g' package/base-files/files/bin/config_generate
-
-# defconfig
-# cp -f ../.config .config
-# cp -f defconfig/mt7981-ax3000.config .config
-sed -i 's|IMG_PREFIX:=|IMG_PREFIX:=$(shell TZ="Asia/Shanghai" date +"%Y%m%d")-24.10-6.6-|' include/image.mk
-# make menuconfig
-
-# Fix libxcrypt build error with musl fortify
-sed -i '/^PKG_NAME:=libxcrypt/a PKG_FORTIFY_SOURCE:=0' package/feeds/packages/libxcrypt/Makefile
-
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/kenzok8/golang -b 1.26 feeds/packages/lang/golang
-
-git clone https://github.com/rchen14b/luci-theme-glass.git package/luci-theme-glass
-
-cp "$GITHUB_WORKSPACE"/QModem/qmodem-next.css feeds/qmodem/luci/luci-app-qmodem-next/htdocs/luci-static/resources/qmodem/qmodem-next.css
-cp "$GITHUB_WORKSPACE"/QModem/overview.js feeds/qmodem/luci/luci-app-qmodem-next/htdocs/luci-static/resources/view/qmodem/overview.js
-cp "$GITHUB_WORKSPACE"/QModem/quectel.sh feeds/qmodem/application/qmodem/files/usr/share/qmodem/vendor/quectel.sh
 
 # compile and build
 # make download -j8
